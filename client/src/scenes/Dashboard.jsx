@@ -1,81 +1,41 @@
-import BreakdownChart from "@/components/BreakdownChart";
-import FlexBetween from "@/components/FlexBetween";
-import Header from "@/components/Header";
-import OverviewChart from "@/components/OverviewChart";
-import StatBox from "@/components/StatBox";
-import { useGetDashboardQuery } from "@/state/api";
-import {
-  DownloadOutlined,
-  Email,
-  PointOfSale,
-  PersonAdd,
-  Traffic,
-} from "@mui/icons-material";
 import {
   Box,
   Button,
+  Grid,
+  Paper,
   Typography,
   useTheme,
-  useMediaQuery,
+  LinearProgress,
 } from "@mui/material";
-import CircularProgress from "@mui/material/CircularProgress";
-
-import { DataGrid } from "@mui/x-data-grid";
+import { DownloadOutlined, Email, PointOfSale, PersonAdd, Traffic } from "@mui/icons-material";
+import OverviewChart from "@/components/OverviewChart";
+import Header from "@/components/Header";
+import FlexBetween from "@/components/FlexBetween";
+import StatBox from "@/components/StatBox";
 
 function Dashboard() {
   const theme = useTheme();
-  const isNonMediumScreens = useMediaQuery("(min-width: 1200px)");
-  const { data, isLoading } = useGetDashboardQuery();
 
-  const columns = [
-    {
-      field: "_id",
-      headerName: "ID",
-      flex: 1,
-    },
-    {
-      field: "userId",
-      headerName: "User ID",
-      flex: 1,
-    },
-    {
-      field: "createdAt",
-      headerName: "CreatedAt",
-      flex: 1,
-    },
-    {
-      field: "products",
-      headerName: "# of Products",
-      flex: 0.5,
-      sortable: false,
-      renderCell: (params) => params.value.length,
-    },
-    {
-      field: "cost",
-      headerName: "Cost",
-      flex: 1,
-      renderCell: (params) => `$${Number(params.value).toFixed(2)}`,
-    },
-  ];
+  // Dummy data for StatBoxes (replace with your actual data)
+  const statBoxData = {
+    sentSMS: { value: 0, increase: "+14%", description: "Sent SMS" },
+    deliveredSMS: { value: 0, increase: "+21%", description: "Delivered SMS" },
+    failedSMS: { value: 0, increase: "+5%", description: "Failed SMS" },
+    queuedSMS: { value: 0, increase: "+43%", description: "Queued SMS" },
+  };
 
-  if (!data || isLoading)
-    return (
-      <Box
-        width="100%"
-        height="100%"
-        minHeight="80vh"
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-      >
-        <CircularProgress color="secondary" />
-      </Box>
-    );
+  // Dummy data for Report section (replace with your actual data)
+  const reportData = {
+    publishedCampaign: { value: 100, progress: 100 },
+    completedCampaign: { value: 0, progress: 0 },
+    successfulSent: { value: 0, progress: 0 },
+    failedSMS: { value: 0, progress: 0 },
+  };
 
   return (
     <Box m="1.5rem 2.5rem">
       <FlexBetween>
-        <Header title="DASHBOARD" subtitle="Welcome to your dashboard" />
+        <Header title="DASHBOARD" subtitle="Welcome" />
 
         <Box>
           <Button
@@ -96,127 +56,96 @@ function Dashboard() {
         </Box>
       </FlexBetween>
 
-      <Box
-        mt="20px"
-        display="grid"
-        gridTemplateColumns="repeat(12, 1fr)"
-        gridAutoRows="160px"
-        gap="20px"
-        sx={{
-          "& > div": { gridColumn: isNonMediumScreens ? undefined : "span 12" },
-        }}
-      >
-        <StatBox
-          title="Total Customers"
-          value={data && data.totalCustomers}
-          increase="+14%"
-          description="Since last month"
-          icon={
-            <Email
-              sx={{ color: theme.palette.secondary[300], fontSize: "26px" }}
-            />
-          }
-        />
-        <StatBox
-          title="Sales Today"
-          value={data && data.todayStats.totalSales}
-          increase="+21%"
-          description="Since last month"
-          icon={
-            <PointOfSale
-              sx={{ color: theme.palette.secondary[300], fontSize: "26px" }}
-            />
-          }
-        />
-        <Box
-          gridColumn="span 8"
-          gridRow="span 2"
-          backgroundColor={theme.palette.background.alt}
-          p="1rem"
-          borderRadius="0.55rem"
-        >
-          <OverviewChart view="sales" isDashboard={true} />
-        </Box>
-        <StatBox
-          title="Monthly Sales"
-          value={data && data.thisMonthStats.totalSales}
-          increase="+5%"
-          description="Since last month"
-          icon={
-            <PersonAdd
-              sx={{ color: theme.palette.secondary[300], fontSize: "26px" }}
-            />
-          }
-        />
-        <StatBox
-          title="Yearly Sales"
-          value={data && data.yearlySalesTotal}
-          increase="+43%"
-          description="Since last month"
-          icon={
-            <Traffic
-              sx={{ color: theme.palette.secondary[300], fontSize: "26px" }}
-            />
-          }
-        />
+      <Grid container spacing={2} mt="20px">
+        {/* Top 4 Stat Boxes */}
+        <Grid item xs={12}>
+          <Grid container spacing={2}>
+            <Grid item xs={12} md={6} lg={3}>
+              <StatBox
+                title="Sent SMS"
+                value={statBoxData.sentSMS.value}
+                increase={statBoxData.sentSMS.increase}
+                description={statBoxData.sentSMS.description}
+                icon={
+                  <Email sx={{ color: theme.palette.secondary[300], fontSize: "26px" }} />
+                }
+              />
+            </Grid>
+            <Grid item xs={12} md={6} lg={3}>
+              <StatBox
+                title="Delivered SMS"
+                value={statBoxData.deliveredSMS.value}
+                increase={statBoxData.deliveredSMS.increase}
+                description={statBoxData.deliveredSMS.description}
+                icon={
+                  <PointOfSale sx={{ color: theme.palette.secondary[300], fontSize: "26px" }} />
+                }
+              />
+            </Grid>
+            <Grid item xs={12} md={6} lg={3}>
+              <StatBox
+                title="Failed SMS"
+                value={statBoxData.failedSMS.value}
+                increase={statBoxData.failedSMS.increase}
+                description={statBoxData.failedSMS.description}
+                icon={
+                  <PersonAdd sx={{ color: theme.palette.secondary[300], fontSize: "26px" }} />
+                }
+              />
+            </Grid>
+            <Grid item xs={12} md={6} lg={3}>
+              <StatBox
+                title="Queued SMS"
+                value={statBoxData.queuedSMS.value}
+                increase={statBoxData.queuedSMS.increase}
+                description={statBoxData.queuedSMS.description}
+                icon={
+                  <Traffic sx={{ color: theme.palette.secondary[300], fontSize: "26px" }} />
+                }
+              />
+            </Grid>
+          </Grid>
+        </Grid>
 
-        <Box
-          gridColumn="span 8"
-          gridRow="span 3"
-          sx={{
-            "& .MuiDataGrid-root": {
-              border: "none",
-              borderRadius: "5rem",
-            },
-            "& .MuiDataGrid-cell": {
-              borderBottom: "none",
-            },
-            "& .MuiDataGrid-columnHeaders": {
-              backgroundColor: theme.palette.background.alt,
-              color: theme.palette.secondary[100],
-              borderBottom: "none",
-            },
-            "& .MuiDataGrid-virtualScroller": {
-              backgroundColor: theme.palette.background.alt,
-            },
-            "& .MuiDataGrid-footerContainer": {
-              backgroundColor: theme.palette.background.alt,
-              color: theme.palette.secondary[100],
-              borderTop: "none",
-            },
-            "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
-              color: `${theme.palette.secondary[200]} !important`,
-            },
-          }}
-        >
-          <DataGrid
-            loading={isLoading || !data}
-            getRowId={(row) => row._id}
-            rows={(data && data.transactions) || []}
-            columns={columns}
-          />
-        </Box>
-        <Box
-          gridColumn="span 4"
-          gridRow="span 3"
-          backgroundColor={theme.palette.background.alt}
-          p="1.5rem"
-          borderRadius="0.55rem"
-        >
-          <Typography variant="h6" sx={{ color: theme.palette.secondary[100] }}>
-            Sales By Category
-          </Typography>
-          <BreakdownChart isDashboard={true} />
-          <Typography
-            p="0 0.6rem"
-            fontSize="0.8rem"
-            sx={{ color: theme.palette.secondary[200] }}
-          >
-            Breakdown of real states and information via category for revenue
-            made for this year and total sales.
-          </Typography>
-        </Box>
-      </Box>
+        {/* Report Section */}
+        <Grid item xs={12}>
+          <Paper sx={{ p: "1rem", mt: "20px", backgroundColor: theme.palette.background.default }}> {/* Set body background color */}
+            <FlexBetween>
+              <Typography variant="h6">Report</Typography>
+              <Typography>&lt;</Typography>
+            </FlexBetween>
+            <Grid container spacing={2} mt="10px">
+              <Grid item xs={12} md={3}>
+                <Typography>Published Campaign</Typography>
+                <Typography variant="h4">{reportData.publishedCampaign.value}%</Typography>
+                <LinearProgress variant="determinate" value={reportData.publishedCampaign.progress} sx={{ mt: 1 }} />
+              </Grid>
+              <Grid item xs={12} md={3}>
+                <Typography>Completed Campaign</Typography>
+                <Typography variant="h4">{reportData.completedCampaign.value} {reportData.completedCampaign.progress.toFixed(2)}%</Typography>
+                <LinearProgress variant="determinate" value={reportData.completedCampaign.progress} sx={{ mt: 1 }} />
+              </Grid>
+              <Grid item xs={12} md={3}>
+                <Typography>Successful Sent</Typography>
+                <Typography variant="h4">{reportData.successfulSent.value}</Typography>
+                <LinearProgress variant="determinate" value={reportData.successfulSent.progress} sx={{ mt: 1 }} />
+              </Grid>
+              <Grid item xs={12} md={3}>
+                <Typography>Failed SMS</Typography>
+                <Typography variant="h4">{reportData.failedSMS.value} %</Typography>
+                <LinearProgress variant="determinate" value={reportData.failedSMS.progress} sx={{ mt: 1 }} />
+              </Grid>
+            </Grid>
+          </Paper>
+        </Grid>
+
+        {/* Overview Chart */}
+        <Grid item xs={12}>
+          <Paper sx={{ p: "1rem", height: "500px", width: "100%", mt: "20px" }}>
+            <OverviewChart view="sales" isDashboard={true} />
+          </Paper>
+        </Grid>
+      </Grid>
     </Box>
   );
 }

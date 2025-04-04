@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import {
   LightModeOutlined,
   DarkModeOutlined,
@@ -7,6 +7,8 @@ import {
   Search,
   SettingsOutlined,
   ArrowDropDownOutlined,
+  NotificationsActive,
+  NotificationsNone,
 } from "@mui/icons-material";
 import { useDispatch } from "react-redux";
 import {
@@ -20,11 +22,35 @@ import {
   Menu,
   MenuItem,
   useTheme,
+  Badge,
+  keyframes,
+  styled,
 } from "@mui/material";
 
 import { setMode } from "@/state";
 import FlexBetween from "./FlexBetween";
 import profileImage from "@/assets/avatar.svg";
+
+const pulse = keyframes`
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(255, 165, 0, 0.7);
+  }
+  70% {
+    transform: scale(1.1);
+    box-shadow: 0 0 0 10px rgba(255, 165, 0, 0);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(255, 165, 0, 0);
+  }
+`;
+
+const NotificationIcon = styled(IconButton)(({ hasNotifications }) => ({
+  ...(hasNotifications && {
+    animation: `${pulse} 2s infinite`,
+  }),
+}));
 
 function Navbar({ user, isSidebarOpen, setIsSidebarOpen }) {
   const dispatch = useDispatch();
@@ -34,6 +60,18 @@ function Navbar({ user, isSidebarOpen, setIsSidebarOpen }) {
   const isOpen = Boolean(anchorEl);
   const handleClick = (event) => setAnchorEl(event.currentTarget);
   const handleClose = () => setAnchorEl(null);
+
+  const [hasNotifications, setHasNotifications] = useState(true); // Example: start with notifications
+
+  useEffect(() => {
+    // Simulate checking for new notifications (e.g., from an API)
+    const notificationCheckInterval = setInterval(() => {
+      // You can replace this with your actual notification logic
+      setHasNotifications((prev) => !prev); // Toggle for demonstration
+    }, 10000); // Check every 10 seconds
+
+    return () => clearInterval(notificationCheckInterval); // Cleanup on unmount
+  }, []);
 
   return (
     <AppBar
@@ -70,6 +108,17 @@ function Navbar({ user, isSidebarOpen, setIsSidebarOpen }) {
               <LightModeOutlined sx={{ fontSize: "25px" }} />
             )}
           </IconButton>
+
+          <NotificationIcon hasNotifications={hasNotifications}>
+            <Badge variant="dot" color="error" invisible={!hasNotifications}>
+              {hasNotifications ? (
+                <NotificationsActive sx={{ fontSize: "25px" }} />
+              ) : (
+                <NotificationsNone sx={{ fontSize: "25px" }} />
+              )}
+            </Badge>
+          </NotificationIcon>
+
           <IconButton>
             <SettingsOutlined sx={{ fontSize: "25px" }} />
           </IconButton>
