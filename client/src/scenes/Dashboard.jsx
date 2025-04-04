@@ -178,7 +178,7 @@ function Dashboard() {
       elevation={3}
       sx={{
         backgroundColor: colors.card,
-        borderTop: `1px solid ${color}`,
+        borderTop: `4px solid ${color}`,
         borderRadius: "10px",
         transition: "transform 0.3s, box-shadow 0.3s",
         overflow: "hidden",
