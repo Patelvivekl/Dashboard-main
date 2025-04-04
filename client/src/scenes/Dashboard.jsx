@@ -27,7 +27,7 @@ function Dashboard() {
     failed: theme.palette.mode === "dark" ? "#E57373" : "#F44336",
     queued: theme.palette.mode === "dark" ? "#64B5F6" : "#2196F3",
     purple: theme.palette.mode === "dark" ? "#BA68C8" : "#9C27B0",
-    card: theme.palette.mode === "dark" ? theme.palette.background.paper : "#FFFFFF",
+    card: theme.palette.mode === "light" ? theme.palette.background.paper : "#02081d",
   };
 
   const useCounter = (end, duration = 2000) => {
@@ -178,7 +178,7 @@ function Dashboard() {
       elevation={3}
       sx={{
         backgroundColor: colors.card,
-        borderTop: `4px solid ${color}`,
+        borderTop: `1px solid ${color}`,
         borderRadius: "10px",
         transition: "transform 0.3s, box-shadow 0.3s",
         overflow: "hidden",

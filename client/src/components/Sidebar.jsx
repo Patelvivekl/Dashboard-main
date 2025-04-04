@@ -47,12 +47,12 @@ const navItems = [
     text: "Dashboard",
     icon: <HomeOutlined />,
   },
+  // {
+  //   text: "Client Facing",
+  //   icon: null,
+  // },
   {
-    text: "Client Facing",
-    icon: null,
-  },
-  {
-    text: "Buy Number",
+    text: "BuyNumber",
     icon: <ShoppingCartOutlined />,
   },
   {
