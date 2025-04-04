@@ -14,6 +14,7 @@ import {
   Collapse,
   styled,
   Slide,
+  Avatar,
 } from "@mui/material";
 import {
   SettingsOutlined,
@@ -126,23 +127,45 @@ const navItems = [
   },
 ];
 
+// Enhanced styled components for smoother design
 const StyledListItemButton = styled(ListItemButton)(({ theme, active }) => ({
-  backgroundColor: active ? theme.palette.secondary[200] : "transparent",
+  backgroundColor: active ? theme.palette.secondary[300] : "transparent",
   color: active ? theme.palette.secondary[900] : theme.palette.secondary[100],
+  borderRadius: "8px",
+  margin: "2px 8px",
+  padding: "8px 16px",
   "&:hover": {
-    backgroundColor: active ? theme.palette.secondary[200] : theme.palette.action.hover,
+    backgroundColor: active 
+      ? theme.palette.secondary[300] 
+      : theme.palette.secondary[700],
+    color: theme.palette.secondary[50],
   },
-  transition: theme.transitions.create(["background-color", "color"], {
-    duration: theme.transitions.duration.short,
+  transition: theme.transitions.create(["background-color", "color", "transform"], {
+    duration: theme.transitions.duration.shorter,
   }),
+  "&:active": {
+    transform: "scale(0.98)",
+  }
 }));
 
 const StyledListItemIcon = styled(ListItemIcon)(({ theme, active }) => ({
-  ml: "2rem",
+  minWidth: "36px",
   color: active ? theme.palette.primary[600] : theme.palette.secondary[200],
   transition: theme.transitions.create("color", {
     duration: theme.transitions.duration.short,
   }),
+}));
+
+// Enhanced logo text component
+const LogoText = styled(Typography)(({ theme }) => ({
+  fontWeight: 800,
+  letterSpacing: "-0.5px",
+  fontSize: "1.5rem",
+  background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.secondary[400]} 100%)`,
+  WebkitBackgroundClip: "text",
+  WebkitTextFillColor: "transparent",
+  marginLeft: 0,
+  display: "inline-block"
 }));
 
 function Sidebar({
@@ -185,36 +208,76 @@ function Sidebar({
               boxSizing: "border-box",
               borderWidth: isNonMobile ? 0 : "2px",
               width: drawerWidth,
+              boxShadow: theme.shadows[4],
+              borderRadius: isNonMobile ? 0 : "0 16px 16px 0",
+              transition: theme.transitions.create(["width", "box-shadow"], {
+                duration: theme.transitions.duration.standard,
+              }),
             },
           }}
         >
-          <Box width="100%" sx={{ overflowY: "auto" }}>
-            <Box m="1.5rem 2rem 1.5rem 3rem">
-              <FlexBetween color={theme.palette.secondary.main}>
-                <Box
-                  display="flex"
-                  alignItems="center"
-                  gap="0.5rem"
-                  width="fit-content"
+          <Box width="100%" sx={{ overflowY: "auto", overflowX: "hidden" }}>
+            <Box 
+              sx={{ 
+                p: "1.2rem", 
+                display: "flex", 
+                alignItems: "center", 
+                justifyContent: "space-between",
+                borderBottom: `1px solid ${theme.palette.divider}`,
+                mb: 1
+              }}
+            >
+              <Box
+                display="flex"
+                alignItems="center"
+                gap="0.2rem"
+              >
+                <Avatar 
+                  sx={{ 
+                    width: 40, 
+                    height: 40, 
+                    backgroundColor: theme.palette.primary.main,
+                    fontWeight: "bold",
+                    fontSize: "1.2rem"
+                  }}
                 >
-                  <Typography variant="h4" fontWeight="bold">
-                    Logo Set
-                  </Typography>
-                  {!isNonMobile && (
-                    <IconButton onClick={() => setIsSidebarOpen(!isSidebarOpen)}>
-                      <ChevronLeft />
-                    </IconButton>
-                  )}
-                </Box>
-              </FlexBetween>
+                  LS
+                </Avatar>
+                <LogoText>
+                  Logo Set
+                </LogoText>
+              </Box>
+              {!isNonMobile && (
+                <IconButton 
+                  onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+                  sx={{ 
+                    color: theme.palette.secondary[100],
+                    "&:hover": {
+                      backgroundColor: theme.palette.secondary[700],
+                      color: theme.palette.secondary[50],
+                    }
+                  }}
+                >
+                  <ChevronLeft />
+                </IconButton>
+              )}
             </Box>
-            <List>
+
+            {/* Navigation Items */}
+            <List sx={{ pt: 0 }}>
               {navItems.map(({ text, icon, children }) => {
                 if (!icon) {
                   return (
                     <Typography
                       key={text}
-                      sx={{ m: "2.25rem 0 1rem 2rem" }}
+                      sx={{ 
+                        m: "1.5rem 0 0.5rem 1.5rem", 
+                        fontSize: "0.75rem",
+                        fontWeight: 600,
+                        textTransform: "uppercase",
+                        letterSpacing: "0.5px",
+                        opacity: 0.7
+                      }}
                       color={theme.palette.secondary[300]}
                     >
                       {text}
@@ -226,40 +289,61 @@ function Sidebar({
                 if (children) {
                   return (
                     <div key={text}>
-                      <ListItem key={text} disablePadding>
+                      <ListItem key={text} disablePadding sx={{ display: "block" }}>
                         <StyledListItemButton
                           onClick={() => handleDropdownClick(text)}
-                          active={active === lcText}
+                          active={active === lcText ? 1 : 0}
                         >
-                          <StyledListItemIcon active={active === lcText}>
+                          <StyledListItemIcon active={active === lcText ? 1 : 0}>
                             {icon}
                           </StyledListItemIcon>
-                          <ListItemText primary={text} />
+                          <ListItemText 
+                            primary={text} 
+                            primaryTypographyProps={{ 
+                              fontWeight: openDropdowns[text] ? 600 : 400,
+                              fontSize: "0.95rem" 
+                            }}
+                          />
                           {openDropdowns[text] ? <ExpandLess /> : <ExpandMore />}
                         </StyledListItemButton>
                       </ListItem>
                       <Collapse in={openDropdowns[text]} timeout="auto" unmountOnExit>
                         <List component="div" disablePadding>
-                          {children.map((child) => (
-                            <ListItem key={child.text} disablePadding>
-                              <StyledListItemButton
-                                onClick={() => {
-                                  navigate(`/${child.text.toLowerCase().replace(/\s+/g, '-')}`);
-                                  setActive(child.text.toLowerCase().replace(/\s+/g, '-'));
-                                }}
-                                active={active === child.text.toLowerCase().replace(/\s+/g, '-')}
-                                sx={{ pl: 4 }}
-                              >
-                                <StyledListItemIcon active={active === child.text.toLowerCase().replace(/\s+/g, '-')}>
-                                  {child.icon}
-                                </StyledListItemIcon>
-                                <ListItemText primary={child.text} />
-                                {active === child.text.toLowerCase().replace(/\s+/g, '-') && (
-                                  <ChevronRightOutlined sx={{ ml: "auto" }} />
-                                )}
-                              </StyledListItemButton>
-                            </ListItem>
-                          ))}
+                          {children.map((child) => {
+                            const childPath = child.text.toLowerCase().replace(/\s+/g, '-');
+                            const isChildActive = active === childPath;
+                            
+                            return (
+                              <ListItem key={child.text} disablePadding sx={{ display: "block" }}>
+                                <StyledListItemButton
+                                  onClick={() => {
+                                    navigate(`/${childPath}`);
+                                    setActive(childPath);
+                                  }}
+                                  active={isChildActive ? 1 : 0}
+                                  sx={{ 
+                                    pl: 4,
+                                    ml: 2,
+                                    borderLeft: `1px solid ${theme.palette.divider}` 
+                                  }}
+                                >
+                                  <StyledListItemIcon active={isChildActive ? 1 : 0}>
+                                    {child.icon}
+                                  </StyledListItemIcon>
+                                  <ListItemText 
+                                    primary={child.text} 
+                                    primaryTypographyProps={{ 
+                                      fontWeight: isChildActive ? 500 : 400,
+                                      fontSize: "0.9rem"
+                                    }}
+                                  />
+                                  {isChildActive && (
+                                    <ChevronRightOutlined sx={{ ml: "auto" }} />
+                                  )}
+                                </StyledListItemButton>
+                              </ListItem>
+                            );
+                          })}
                         </List>
                       </Collapse>
                     </div>
@@ -267,18 +351,24 @@ function Sidebar({
                 }
 
                 return (
-                  <ListItem key={text} disablePadding>
+                  <ListItem key={text} disablePadding sx={{ display: "block" }}>
                     <StyledListItemButton
                       onClick={() => {
                         navigate(`/${lcText}`);
                         setActive(lcText);
                       }}
-                      active={active === lcText}
+                      active={active === lcText ? 1 : 0}
                     >
-                      <StyledListItemIcon active={active === lcText}>
+                      <StyledListItemIcon active={active === lcText ? 1 : 0}>
                         {icon}
                       </StyledListItemIcon>
-                      <ListItemText primary={text} />
+                      <ListItemText 
+                        primary={text}
+                        primaryTypographyProps={{ 
+                          fontWeight: active === lcText ? 600 : 400,
+                          fontSize: "0.95rem"
+                        }}
+                      />
                       {active === lcText && (
                         <ChevronRightOutlined sx={{ ml: "auto" }} />
                       )}
@@ -289,23 +379,32 @@ function Sidebar({
             </List>
           </Box>
 
-          <Box>
+          {/* User Profile Section */}
+          <Box position="sticky" bottom={0} bgcolor={theme.palette.background.alt}>
             <Divider />
             <FlexBetween
-              textTransform="none"
-              gap="1rem"
-              m="1.5rem 2rem 1.5rem 3rem"
+              gap="0.5rem"
+              p="1rem"
+              sx={{
+                borderTop: `1px solid ${theme.palette.divider}`,
+                "&:hover": {
+                  backgroundColor: theme.palette.action.hover,
+                },
+                transition: theme.transitions.create("background-color", {
+                  duration: theme.transitions.duration.short,
+                })
+              }}
             >
-              <Box
-                component="img"
+              <Avatar
                 alt="profile"
                 src={profileImage}
-                height="40px"
-                width="40px"
-                borderRadius="50%"
-                sx={{ objectFit: "cover" }}
+                sx={{ 
+                  width: 42, 
+                  height: 42, 
+                  border: `2px solid ${theme.palette.primary.main}` 
+                }}
               />
-              <Box textAlign="left">
+              <Box flexGrow={1} ml={1}>
                 <Typography
                   fontWeight="bold"
                   fontSize="0.9rem"
@@ -315,17 +414,22 @@ function Sidebar({
                 </Typography>
                 <Typography
                   fontSize="0.8rem"
-                  sx={{ color: theme.palette.secondary[200] }}
+                  sx={{ color: theme.palette.secondary[300] }}
                 >
                   {user.occupation}
                 </Typography>
               </Box>
-              <SettingsOutlined
-                sx={{
+              <IconButton 
+                sx={{ 
                   color: theme.palette.secondary[300],
-                  fontSize: "25px ",
+                  "&:hover": {
+                    backgroundColor: theme.palette.secondary[700],
+                    color: theme.palette.secondary[100],
+                  }
                 }}
-              />
+              >
+                <SettingsOutlined fontSize="small" />
+              </IconButton>
             </FlexBetween>
           </Box>
         </Drawer>
