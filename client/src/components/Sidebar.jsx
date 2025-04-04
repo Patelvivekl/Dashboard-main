@@ -52,14 +52,14 @@ const navItems = [
     icon: null,
   },
   {
-    text: "Buy Number",
+    text: "BuyNumber",
     icon: <ShoppingCartOutlined />,
   },
   {
     text: "Inbox Message",
     icon: <Groups2Outlined />,
   },
-  {
+{
     text: "Campaign Management",
     icon: <ReceiptLongOutlined />,
     children: [

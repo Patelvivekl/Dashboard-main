@@ -178,15 +178,10 @@ function Dashboard() {
       elevation={3}
       sx={{
         backgroundColor: colors.card,
-        borderTop: `4px solid ${color}`,
+        borderTop: `2px solid ${color}`,
         borderRadius: "10px",
         transition: "transform 0.3s, box-shadow 0.3s",
         overflow: "hidden",
-        position: "relative",
-        "&:hover": {
-          transform: "translateY(-5px)",
-          boxShadow: 6,
-        },
       }}
     >
       <style>
