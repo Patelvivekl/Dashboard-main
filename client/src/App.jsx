@@ -13,7 +13,6 @@ import {
 import { themeSettings } from "./theme";
 import Layout from "./scenes/Layout";
 import Dashboard from "./scenes/Dashboard";
-import Products from "./scenes/Products";
 import Customers from "./scenes/Customers";
 import Transactions from "./scenes/Transactions";
 import Geography from "./scenes/Geography";
@@ -23,13 +22,14 @@ import Monthly from "./scenes/Monthly";
 import Breakdown from "./scenes/Breakdown";
 import Admin from "./scenes/Admin";
 import Performance from "./scenes/Performance";
+import BuyNumber from "./scenes/BuyNumber";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route element={<Layout />}>
       <Route path="/" element={<Navigate to="/dashboard" replace />} />
       <Route path="/dashboard" element={<Dashboard />} />
-      <Route path="/products" element={<Products />} />
+      <Route path="/buyNumber" element={<BuyNumber />} />
       <Route path="/customers" element={<Customers />} />
       <Route path="/transactions" element={<Transactions />} />
       <Route path="/geography" element={<Geography />} />
