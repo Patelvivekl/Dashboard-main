@@ -14,7 +14,6 @@ import {
   Collapse,
   styled,
   Slide,
-  Grid,
 } from "@mui/material";
 import {
   SettingsOutlined,
@@ -47,12 +46,12 @@ const navItems = [
     text: "Dashboard",
     icon: <HomeOutlined />,
   },
-  // {
-  //   text: "Client Facing",
-  //   icon: null,
-  // },
   {
-    text: "BuyNumber",
+    text: "Client Facing",
+    icon: null,
+  },
+  {
+    text: "Buy Number",
     icon: <ShoppingCartOutlined />,
   },
   {
@@ -63,10 +62,10 @@ const navItems = [
     text: "Campaign Management",
     icon: <ReceiptLongOutlined />,
     children: [
-      { text: "Campaign Report", icon: <TrendingUpOutlined /> },
-      { text: "Single Message", icon: <AddCircleOutline /> },
-      { text: "Bulk Message", icon: <EditOutlined /> },
-      { text: "Message Templates", icon: <PieChartOutlined /> },
+      { text: "Campaign Report", icon: <AddCircleOutline /> },
+      { text: "Single Message", icon: <EditOutlined /> },
+      { text: "Bulk Message", icon: <DeleteOutline /> },
+      { text: "Message Templates", icon: <DeleteOutline /> },
     ],
   },
   {
@@ -79,16 +78,16 @@ const navItems = [
   },
   {
     text: "Contacts",
-    icon: <Groups2Outlined />,
+    icon: <ReceiptLongOutlined />,
     children: [
       { text: "Import Contacts", icon: <AddCircleOutline /> },
       { text: "Contacts Group", icon: <EditOutlined /> },
     ],
   },
-  // {
-  //   text: "Sales",
-  //   icon: null,
-  // },
+  {
+    text: "Sales",
+    icon: null,
+  },
   {
     text: "Sender Group",
     icon: <PointOfSaleOutlined />,
@@ -110,7 +109,7 @@ const navItems = [
     icon: <PieChartOutlined />,
   },
   {
-    text: "Admin Navigation",
+    text: "Management",
     icon: null,
   },
   {
@@ -198,15 +197,9 @@ function Sidebar({
                   gap="0.5rem"
                   width="fit-content"
                 >
-        <Grid item>
-          <img
-            src="src/assets/Screenshot 2025-04-04 115648.png" // Replace with your image URL
-            alt="Logo 1"
-            width={150}
-            height={80}
-            style={{ objectFit: 'contain' }} // Make sure the logo fits well
-          />
-        </Grid>
+                  <Typography variant="h4" fontWeight="bold">
+                    Logo Set
+                  </Typography>
                   {!isNonMobile && (
                     <IconButton onClick={() => setIsSidebarOpen(!isSidebarOpen)}>
                       <ChevronLeft />
